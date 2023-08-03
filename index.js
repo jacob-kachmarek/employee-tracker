@@ -7,7 +7,7 @@ const db = mysql.createConnection(
         host: 'localhost',
         user: 'root',
         password: 'password',
-        database: 'tracker_db'
+        database: 'employee_db'
     }
 );
 
@@ -17,18 +17,18 @@ const questions = [{
     type: "list",
     name: "options",
     message: "What do you want to do?",
-    choices: ["View all departments", "View all roles", "View all employees", "Add a department", "Add a role", "Add an employee", "Update an employee role"]
+    choices: ["View all departments", "View all job titles", "View all employees", "Add a department", "Add a job title", "Add an employee", "Update an employee job title"]
 }];
 
 
-const options = () => {
+function options() {
     inquirer.prompt(questions).then(res => {
         switch (res.options) {
             case "View all departments":
                 viewAllDepartments()
                 break;
-            case "View all roles":
-                viewAllRoles()
+            case "View all job titles":
+                viewAllJobTitles()
                 break;
             case "View all employees":
                 viewAllEmployees()
@@ -36,15 +36,36 @@ const options = () => {
             case "Add a department":
                 addNewDepartment()
                 break;
-            case "Add a role":
+            case "Add a job title":
                 addNewRole()
                 break;
             case "Add an employee":
                 addNewEmployee()
                 break;
-            case "Update an employee role":
+            case "Update an employee job title":
                 updateEmployeeRole()
                 break;
         }
+    })
+};
+
+function viewAllDepartments() {
+    db.query("SELECT * FROM department", (err, data) => {
+        printTable(data);
+        options();
+    })
+};
+
+function viewAllJobTitles() {
+    db.query("SELECT * FROM job_title", (err, data) => {
+        printTable(data);
+        options();
+    })
+};
+
+function viewAllEmployees() {
+    db.query("SELECT * FROM employee", (err, data) => {
+        printTable(data);
+        options();
     })
 };
