@@ -17,34 +17,49 @@ const questions = [{
     type: "list",
     name: "options",
     message: "What do you want to do?",
-    choices: ["View all departments", "View all job titles", "View all employees", "Add a department", "Add a job title", "Add an employee", "Update an employee job title"]
+    choices: ["View all departments", "View all job titles", "View all employees", "Add a department", "Add a job title", "Add an employee", "Update an employee job title", "Quit"],
 }];
 
+let shouldQuit = false;
 
 function options() {
+
+    if (shouldQuit) {
+        console.log("Exiting the application...");
+        db.end();
+        process.exit();
+        return;
+    }
+
     inquirer.prompt(questions).then(res => {
         switch (res.options) {
             case "View all departments":
-                viewAllDepartments()
+                viewAllDepartments();
                 break;
             case "View all job titles":
-                viewAllJobTitles()
+                viewAllJobTitles();
                 break;
             case "View all employees":
-                viewAllEmployees()
+                viewAllEmployees();
                 break;
             case "Add a department":
-                addNewDepartment()
+                addNewDepartment();
                 break;
             case "Add a job title":
-                addNewRole()
+                addNewRole();
                 break;
             case "Add an employee":
-                addNewEmployee()
+                addNewEmployee();
                 break;
             case "Update an employee job title":
-                updateEmployeeRole()
+                updateEmployeeRole();
                 break;
+            case "Quit":
+                shouldQuit = true;
+                options();
+                break;
+            default:
+                options();
         }
     })
 };
