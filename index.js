@@ -21,16 +21,16 @@ const questions = [{
 }];
 
 let shouldQuit = false;
-
+//Options function that uses inquirer to prompt the user to answer the questions and get a response. Each case will run a function that will fetch data from our database and display it in the console 
 function options() {
-
+    //If statement that will close the application if shouldQuit is equal to true. Could also write as if (shouldQuit === true) {}
     if (shouldQuit) {
         console.log("Exiting the application...");
         db.end();
         process.exit();
         return;
     }
-
+    //Switch case that uses inquirer to call of the prompt method to prompt to user the questions from the questions object and runs a different function depending on what the user chooses.
     inquirer.prompt(questions).then(res => {
         switch (res.options) {
             case "View all departments":
@@ -63,28 +63,28 @@ function options() {
         }
     })
 };
-
+//Function that will let the user view the departments table of the db
 function viewAllDepartments() {
     db.query("SELECT * FROM department", (err, data) => {
         printTable(data);
         options();
     })
 };
-
+//Function that will let the user view the job_title table of the db
 function viewAllJobTitles() {
     db.query("SELECT * FROM job_title", (err, data) => {
         printTable(data);
         options();
     })
 };
-
+//Function that will let the user view the employee table of the db
 function viewAllEmployees() {
     db.query("SELECT * FROM employee", (err, data) => {
         printTable(data);
         options();
     })
 };
-
+//Function that will let the user add a new department
 function addNewDepartment() {
     inquirer.prompt([{
         type: "input",
@@ -92,6 +92,7 @@ function addNewDepartment() {
         message: "Add new department",
 
     }])
+        //After user answers inquirer prompt it will take the input of the user (res.departmentName) and insert it into the db using sql command
         .then(res => {
             db.query("INSERT INTO department (dep_name) VALUES (?)", res.departmentName, (err, data) => {
                 options()
@@ -99,7 +100,7 @@ function addNewDepartment() {
         })
 }
 
-
+//Function that will let the user add a new job title to the db
 function addNewJobTitle() {
 
     db.query("SELECT * FROM department", (err, data) => {
@@ -143,7 +144,7 @@ function addNewJobTitle() {
     });
 };
 
-
+//Function that will let the user add a new employee to the db
 
 function addNewEmployee() {
     db.query("SELECT * FROM job_title", (err, data) => {
@@ -196,7 +197,7 @@ function addNewEmployee() {
             });
     });
 };
-
+//Function that will let the user change an existing employees job
 function updateEmployeeJob() {
     db.query("SELECT * FROM employee", (err, employeeData) => {
         if (err) {
